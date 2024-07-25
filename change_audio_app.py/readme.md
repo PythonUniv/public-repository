@@ -2,6 +2,8 @@
 ### Application is build for a test task.
 
  App is intended for splitting input video on parts of equal duration and replacing the audio on the chosen part using Riffusion (Diffusion that works on spectrograms of audio instead of real-world images).
+ # Visit https://huggingface.co/spaces/dima21232/change_audio
+ # where I deployed model on GPU. Just trigger it!
 
 
 # Functional
