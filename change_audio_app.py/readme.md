@@ -24,7 +24,7 @@
 #### The 'Split-n-Generate' button works only when the video loaded and input field are fully correct (otherwise it is invisible)
 
 ---
-# Engineer details:
+# Engineering details:
 #### Builded with:
     torch
     ffmpeg (for audio/video manipulation)
