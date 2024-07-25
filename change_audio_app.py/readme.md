@@ -43,7 +43,7 @@ And, of course, using Riffusion repository for transforming spectrograms to audi
  * riffusion_inference.py - running of the diffusion model
  * config.py - settings of the inference
 
-# Start of the application 
+# Run application
 ### Deploy guide on HuggingFace Spaces: https://huggingface.co/docs/hub/spaces-overview
 
 ### or 
@@ -53,6 +53,46 @@ And, of course, using Riffusion repository for transforming spectrograms to audi
     cd change_audio
     pip install -r requirements.txt
     python app/app.py
+
+### Template of Dockerfile used by HuggingFace for deployment:
+    FROM docker.io/nvidia/cuda:12.3.2-cudnn9-devel-  
+    ubuntu22.04@sha256:fb1ad20f2552f5b3aafb2c9c478ed57da95e2bb027d15218d7a55b3a0e4b4413
+
+    RUN pyenv install 3.10 && 	pyenv global 3.10 && 	pyenv rehash
+    RUN pip install --no-cache-dir pip==22.3.1 && 	pip install --no-cache-dir 	datasets 	"huggingface-hub>=0.19" "hf-transfer>=0.1.4" "protobuf<4" "click<8.1" 
+    "pydantic~=1.0"
+
+    COPY --chown=1000:1000 --from=root / /
+
+    RUN apt-get update && apt-get install -y 	git rsync 	make build-essential libssl-dev zlib1g-dev 	libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm 	libncursesw5- 
+    dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev git-lfs  	ffmpeg libsm6 libxext6 cmake libgl1-mesa-glx 	&& rm -rf /var/lib/apt/lists/* 	&& git lfs 
+    install
+
+    RUN apt-get update && apt-get install -y fakeroot &&     mv /usr/bin/apt-get /usr/bin/.apt-get &&     echo '#!/usr/bin/env sh\nfakeroot /usr/bin/.apt-get $@' > 
+    /usr/bin/apt-get &&     chmod +x /usr/bin/apt-get && 	rm -rf /var/lib/apt/lists/* && 	useradd -m -u 1000 user
+
+
+    RUN curl https://pyenv.run | bash
+
+    RUN pip freeze > /tmp/freeze.txt
+
+
+    WORKDIR /home/user/app
+
+    RUN --mount=target=/tmp/requirements.txt,source=requirements.txt     pip install --no-cache-dir -r /tmp/requirements.txt
+
+    RUN pip install --no-cache-dir 	gradio[oauth]==4.39.0 	"uvicorn>=0.14.0" 	spaces
+
+    COPY --link --chown=1000 ./ /home/user/app
+
+    COPY --from=pipfreeze --link --chown=1000 /tmp/freeze.txt /tmp/freeze.txt
+
+    #--> Pushing image
+    #DONE 1.0s
+    #
+    #--> Exporting cache
+    #DONE 1.1s
+
 
 
 #### Init your .env file inside /app folder!
