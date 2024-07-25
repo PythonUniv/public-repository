@@ -48,7 +48,7 @@ And, of course, using Riffusion repository for transforming spectrograms to audi
 
 ### or 
 
-### Using Virtual Machine:
+### Using Virtual Environment:
     git clone https://huggingface.co/spaces/dima21232/change_audio
     cd change_audio
     pip install -r requirements.txt
